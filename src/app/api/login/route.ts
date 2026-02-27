@@ -1,18 +1,18 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 export async function POST(req: Request) {
   const { username, password } = await req.json();
 
+  // Ganti sesuai credentials yang kamu mau
   if (username === "admin" && password === "admin123") {
-    const res = NextResponse.json({ success: true });
-
-    res.cookies.set("admin", "true", {
+    const cookieStore = await cookies();
+    cookieStore.set("admin", "true", {
       httpOnly: true,
       path: "/",
     });
-
-    return res;
+    return NextResponse.json({ ok: true });
   }
 
-  return NextResponse.json({ success: false });
+  return NextResponse.json({ ok: false }, { status: 401 });
 }

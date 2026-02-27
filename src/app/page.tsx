@@ -1,13 +1,24 @@
 import { getProducts } from "@/services/product.service";
 import ProductCard from "@/components/ProductCard";
 import { Product } from "@/types";
+import { getLocalProducts } from "@/lib/products";
 
 export default async function Home() {
-  const products: Product[] = await getProducts();
+  const [apiProducts, localProducts] = await Promise.all([
+    getProducts(),
+    Promise.resolve(getLocalProducts()),
+  ]);
+
+  const products: Product[] = [...localProducts, ...apiProducts];
 
   return (
-    <main className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Katalog Produk</h1>
+    <main className="max-w-6xl mx-auto px-6 py-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-white">Katalog Produk</h1>
+        <p className="text-gray-400 mt-1">
+          {products.length} produk tersedia
+        </p>
+      </div>
 
       <div className="grid md:grid-cols-3 gap-6">
         {products.map((item: Product) => (
