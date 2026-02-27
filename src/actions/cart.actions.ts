@@ -2,7 +2,7 @@
 
 import { getCart, saveCart } from "@/lib/cart";
 import { getProductById } from "@/services/product.service";
-import { Product } from "@/types/product";
+import { Product } from "@/types";
 
 export async function addToCartAction(formData: FormData) {
   const productId = formData.get("productId");

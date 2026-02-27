@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { Product } from "@/types/product";
+import { Product } from "@/types"; // ← ganti dari @/types/product
 
 export interface CartItem extends Product {
   qty: number;
