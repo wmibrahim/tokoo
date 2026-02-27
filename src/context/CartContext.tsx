@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { Product } from "@/types/product";
+import { Product } from "@/types";
 
 interface CartItem extends Product {
   qty: number;
