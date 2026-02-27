@@ -1,27 +1,26 @@
 "use server";
 
-import { cookies } from "next/headers";
+import { getCart, saveCart } from "@/lib/cart";
+import { getProductById } from "@/services/product.service";
+import { Product } from "@/types/product";
 
-export async function addToCart(product: any) {
-  const cookieStore = cookies();
-  const existing = cookieStore.get("cart");
+export async function addToCartAction(formData: FormData) {
+  const productId = formData.get("productId");
 
-  let cart = [];
-
-  if (existing?.value) {
-    cart = JSON.parse(existing.value);
+  if (!productId || typeof productId !== "string") {
+    throw new Error("Invalid product ID");
   }
 
-  const index = cart.findIndex((item: any) => item.id === product.id);
+  const product: Product = await getProductById(productId);
+  const cart = await getCart();
 
-  if (index >= 0) {
-    cart[index].quantity += 1;
+  const exist = cart.find((i) => i.id === product.id);
+
+  if (exist) {
+    exist.qty += 1;
   } else {
-    cart.push({ ...product, quantity: 1 });
+    cart.push({ ...product, qty: 1 });
   }
 
-  cookieStore.set("cart", JSON.stringify(cart), {
-    httpOnly: true,
-    path: "/",
-  });
+  await saveCart(cart);
 }
