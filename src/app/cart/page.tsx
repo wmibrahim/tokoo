@@ -1,23 +1,40 @@
-import { getProducts } from "@/services/product.service";
-import ProductCard from "@/components/ProductCard";
+import { cookies } from "next/headers";
 
-export default async function Home() {
-  const products = await getProducts();
+export default function CartPage() {
+  const cartCookie = cookies().get("cart");
+
+  let cart: any[] = [];
+
+  if (cartCookie?.value) {
+    cart = JSON.parse(cartCookie.value);
+  }
+
+  const total = cart.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
   return (
-    <main className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">
-        Katalog Produk
-      </h1>
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-4">Keranjang</h1>
 
-      <div className="grid md:grid-cols-3 gap-6">
-        {products.map((product: any) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-          />
-        ))}
-      </div>
-    </main>
+      {cart.length === 0 ? (
+        <p>Keranjang kosong</p>
+      ) : (
+        <>
+          {cart.map((item) => (
+            <div key={item.id} className="flex justify-between mb-2">
+              <span>
+                {item.title} x {item.quantity}
+              </span>
+              <span>Rp {item.price * item.quantity}</span>
+            </div>
+          ))}
+
+          <hr className="my-3" />
+          <p className="font-bold">Total: Rp {total}</p>
+        </>
+      )}
+    </div>
   );
 }
