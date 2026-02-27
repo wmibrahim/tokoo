@@ -16,3 +16,13 @@ export async function getProducts(): Promise<Product[]> {
       p.category === "womens-shoes"
   );
 }
+
+export async function getProductById(id: string): Promise<Product> {
+  const res = await fetch(`https://dummyjson.com/products/${id}`, {
+    cache: "no-store",
+  });
+
+  if (!res.ok) throw new Error("Product not found");
+
+  return res.json();
+}
