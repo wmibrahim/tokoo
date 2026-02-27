@@ -1,27 +1,17 @@
 "use client";
 
-import { useTransition } from "react";
-import { addToCart } from "@/actions/cart.actions";
-import { useRouter } from "next/navigation";
+import { useCart } from "@/context/CartContext";
+import { Product } from "@/types";
 
-export default function AddToCartButton({ product }: any) {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
-
-  function handleClick() {
-    startTransition(async () => {
-      await addToCart(product);
-      router.refresh();
-    });
-  }
+export default function AddToCartButton({ product }: { product: Product }) {
+  const { addToCart } = useCart();
 
   return (
     <button
-      onClick={handleClick}
+      onClick={() => addToCart(product)}
       className="bg-blue-500 text-white px-3 py-1 rounded"
-      disabled={isPending}
     >
-      {isPending ? "Adding..." : "Add to Cart"}
+      Add to Cart
     </button>
   );
 }

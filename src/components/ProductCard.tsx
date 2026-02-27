@@ -1,7 +1,8 @@
 import Link from "next/link";
 import AddToCartButton from "./AddToCartButton";
+import { Product } from "@/types";
 
-export default function ProductCard({ product }: any) {
+export default function ProductCard({ product }: { product: Product }) {
   return (
     <div className="border rounded-xl p-4 shadow">
       <img
@@ -26,7 +27,7 @@ export default function ProductCard({ product }: any) {
           Detail
         </Link>
 
-        <AddToCartButton productId={product.id} />
+        <AddToCartButton product={product} /> {/* ← fix: dari productId jadi product */}
       </div>
     </div>
   );

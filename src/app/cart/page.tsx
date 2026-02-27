@@ -1,18 +1,9 @@
-import { cookies } from "next/headers";
+"use client";
+
+import { useCart } from "@/context/CartContext";
 
 export default function CartPage() {
-  const cartCookie = cookies().get("cart");
-
-  let cart: any[] = [];
-
-  if (cartCookie?.value) {
-    cart = JSON.parse(cartCookie.value);
-  }
-
-  const total = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  const { cart, total, updateQty, removeItem } = useCart();
 
   return (
     <div className="p-6">
@@ -25,9 +16,9 @@ export default function CartPage() {
           {cart.map((item) => (
             <div key={item.id} className="flex justify-between mb-2">
               <span>
-                {item.title} x {item.quantity}
+                {item.title} x {item.qty}
               </span>
-              <span>Rp {item.price * item.quantity}</span>
+              <span>Rp {item.price * item.qty}</span>
             </div>
           ))}
 
