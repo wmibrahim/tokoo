@@ -5,15 +5,16 @@ export interface CartItem extends Product {
   qty: number;
 }
 
-export function getCart(): CartItem[] {
-  const cookieStore = cookies();
+export async function getCart(): Promise<CartItem[]> {
+  const cookieStore = await cookies();
   const cart = cookieStore.get("cart")?.value;
 
   return cart ? JSON.parse(cart) : [];
 }
 
-export function saveCart(cart: CartItem[]) {
-  cookies().set("cart", JSON.stringify(cart), {
+export async function saveCart(cart: CartItem[]) {
+  const cookieStore = await cookies();
+  cookieStore.set("cart", JSON.stringify(cart), {
     httpOnly: true,
   });
 }
